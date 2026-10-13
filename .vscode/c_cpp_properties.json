@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/opt/libomp/include"
+            ],
+            "defines": [],
+            "compilerArgs": [
+                "-Xpreprocessor",
+                "-fopenmp",
+                "-I/opt/homebrew/opt/libomp/include"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "compilerPath": "/opt/homebrew/opt/llvm/bin/clang++"
+        }
+    ],
+    "version": 4
+}

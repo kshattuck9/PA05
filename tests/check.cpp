@@ -20,6 +20,26 @@ int main() {
         auto r=solve(a,b,z,1,1.2,1e-12,1e-13,1000);
         if(!r.converged) throw std::runtime_error("did not converge");
         for(int p=0;p<4;++p) near(z[p],x[p]);
+        // new test: fast solver on a known 2x2 system
+        double x_fast[] = {0, 0, 0, 0};
+        auto rf = solve_fast(a, b, x_fast, 1e-12, 1e-13, 1000);
+        if (!rf.converged)
+            throw std::runtime_error("fast solver did not converge");
+        for (int p = 0; p < 4; ++p)
+            near(x_fast[p], x[p]);
+        double ax_fast[4];
+        apply(a, x_fast, ax_fast);
+        double residual_fast = 0.0;
+        for (int p = 0; p < 4; ++p)
+            residual_fast = std::max(
+                residual_fast, std::abs(b[p] - ax_fast[p]));
+        double b_norm = 0.0;
+        for (int p = 0; p < 4; ++p)
+            b_norm = std::max(b_norm, std::abs(b[p]));
+        double tolerance = 1e-13 + 1e-12 * b_norm;
+        if (residual_fast > tolerance)
+            throw std::runtime_error("fast solver residual too large");
+        near(residual_fast, rf.residual);
         std::cout<<"Public stencil, sweep, and solve checks passed.\n";
     } catch(const std::exception& e) { std::cerr<<e.what()<<'\n'; return 1; }
 }
